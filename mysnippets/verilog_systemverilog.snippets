@@ -1,0 +1,181 @@
+global !p
+def complete(t, opts):
+	if t:
+		opts = [ m[len(t):] for m in opts if m.startswith(t) ]
+	if len(opts) == 1:
+		return opts[0]
+	return "(" + "|".join(opts) + ")"
+endglobal
+
+snippet lic "license info" b
+/*****************************************************************************
+*                                                                            *
+* Copyright (c) 2020 Synopsys Inc. All rights reserved.                      *
+*                                                                            *
+* XXXXXXXX Proprietary and Confidential. This file contains confidential     *
+* information and the trade secrets of Synopsys Inc. Use, disclosure, or     *
+* reproduction is prohibited without the prior express written permission    *
+* of Synopsys, Inc.                                                          *
+*                                                                            *
+* XXXXXXXX, Inc.                                                             *
+* 700 XXXXXXXXXXXXXXXX Road                                                  *
+* XXXXXXXx XXXX, XXXXXXXXXX 94043                                            *
+* XXXXXXXXXXXXXXA                                                            *
+*                                                                            *
+******************************************************************************/
+endsnippet	
+
+snippet fi "file info mation"
+/****************************************************************************
+* File Name     :  `!v expand("%:t")`
+* Description   :	 ${1:"Add description here"} 
+* Create Date   :  `!v strftime("%b %d %Y")`
+* Last Modified :  
+* Create By     :  `echo ${USER}@domain.com`
+*****************************************************************************/
+endsnippet
+
+snippet cp "compilation protect" b
+\`ifndef `!v toupper(expand("%:t:r"))."__".toupper(expand("%:e"))`
+\`define `!v toupper(expand("%:t:r"))."__".toupper(expand("%:e"))`
+${1: //body here}
+\`endif //`!v toupper(expand("%:t:r"))."__".toupper(expand("%:e"))`
+endsnippet
+
+snippet uc "create a uvm_component" b
+class ${1:class_name} extends ${2:base_class_name};
+	
+	\`uvm_component_utils($1)
+
+	function new (string name, uvm_component parent);
+		super.new(name, parent);
+	endfunction: new 
+
+	function void build_phase(uvm_phase phase);
+		super.build_phase(phase);
+	endfunction: build_phase
+
+endclass : ${1/\s.*//g}
+endsnippet
+	
+snippet uo "create a uvm_object" b
+class ${1:class_name} extends ${2:base_class_name};
+	
+	\`uvm_object_utils($1)
+
+	function new (string name = "");
+		super.new(name);
+	endfunction: new 
+
+endclass : ${1/\s.*//g}
+endsnippet
+
+snippet upc "create a uvm_component" b
+class ${1:class_name} #(${2:parameters_here}) extends ${3:base_class_name};
+	
+	\`uvm_component_param_utils($1)
+
+	function new (string name, uvm_component parent);
+		super.new(name, parent);
+	endfunction: new 
+
+	function void build_phase(uvm_phase phase);
+		super.build_phase(phase);
+	endfunction: build_phase
+
+endclass : ${1/\s.*//g}
+endsnippet
+	
+snippet upo "create a uvm_object" b
+class ${1:class_name} #(${2:parameters_here}) extends ${3:base_class_name};
+	
+	\`uvm_object_param_utils($1)
+
+	function new (string name = "");
+		super.new(name);
+	endfunction: new 
+
+endclass : ${1/\s.*//g}
+endsnippet
+
+snippet rdesc "routine description" b
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Name					:  ${1: name}
+// Description  :  ${2: description here}
+// Arguments    :  ${3: arguments here}
+// Return Value :  ${4: return value here}
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+endsnippet
+	
+snippet evt  "external virtual task" b
+extern virtual task ${1:task_name}
+endsnippet 
+
+snippet ivt "virtaul task in class" b
+virtaul task ${1:task_name}();
+endtask : ${1/\(.*//}
+endsnippet
+
+snippet ivf "virtual function in classs" b
+virtual function ${1:return_type} ${2:function_name}();
+endfunction : ${2/\(.*//}
+endsnippet
+
+snippet uoc "uvm create"
+${1:uvm_object}::type_id::create("${1:name}");
+endsnippet
+
+snippet ucc "uvm create"
+${1:uvm_component}::type_id::create("${2:name}", parent);
+endsnippet
+
+snippet ievt "implement the extranl virtaul task" b
+task `!v expand("%:t:r")`::${1:task_name}
+endtask : ${1/\(.*//}
+endsnippet
+
+snippet evf "external virtual function" b
+extern virtual function ${1:return_type} ${2:function_name}
+endsnippet
+
+snippet ievf "implement the extranl virtaul function" b
+function ${1:return_type} `!v expand("%:t:r")`::${2:function_name}
+endfunction : ${2/\(.*//}
+endsnippet
+
+snippet ufatal "uvm fatal" 
+\`uvm_fatal(${1:msg_id}, $sformatf("${2:msg_info}"))
+endsnippet
+
+snippet uerror "uvm error"
+\`uvm_error(${1:msg_id}, $sformatf("${2:msg_info}"))
+endsnippet 
+
+snippet uinfo "uvm info"
+\`uvm_info(${1:msg_id}, $sformatf("${2:msg_info}"), UVM_$3`!p snip.rv=complete(t[3], ['NONE', 'LOW', 'MEDIUM', 'DEBUG', 'HIGH'])`)
+endsnippet 
+
+snippet foril "for increace loop" b
+for (int ${1:idx} = ${2:min_value}; $1 < ${3:max_value}; $1++) begin
+end
+endsnippet 
+
+snippet fordl "for decreace loop" b
+for (int ${1:idx} = ${2:max_value}; $1 < ${3:min_value}; $1--) begin
+end
+endsnippet 
+
+snippet ifb "if block" b
+if (${1:if cond}) begin //Comments here
+end
+endsnippet 
+
+snippet elseb "else block" b
+else begin //${1:Comments here}
+end
+endsnippet 
+
+snippet elifb "esleif block" b
+else if (${1:else if cond}) begin ${1://Comments here}
+end
+endsnippet
